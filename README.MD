@@ -1,6 +1,6 @@
-# Project Zomboid dedicated server container
+# [MONGA](https://www.github.com/mongagit) Project Zomboid Dedicated Server Container
 
-Este Dockerfile baixa o servidor dedicado do Project Zombie usando o SteamCMD. Permitirá implantar com facilidade um servidor em Kubernetes, Docker...
+Este Dockerfile baixa o servidor dedicado do [Monga Project Zombie](https://www.github.com/mongagit) usando o SteamCMD. Permitirá implantar com facilidade um servidor em Kubernetes, Docker...
 
 A imagem pronta para uso está disponível aqui:
 
@@ -10,41 +10,26 @@ https://hub.docker.com/r/lorthe/project_zomboid_monga
 
 Este dockerfile converte algumas variáveis ​​env em argumentos no comando do servidor. A imagem suporta as seguintes variáveis ​​de ambiente:
 
-```ADMINPASSWORD:``` Senha do administrador. É obrigatório na primeira inicialização ou falhará.
-
-```PASSWORD:``` Senha do servidor. É opcional.
-
-```CACHEDIR:``` Defina a pasta padrão. Por padrão, odiretório inicial (/home/steam/Zomboid).
-
-```DEBUG:``` Ative o modo de depuração.
-
-```FORCEUPDATE:``` Force uma atualização a cada inicialização.
-
-```IP:``` Defina o IP da interface. Por padrão, todas as interfaces.
-
-```MEMORY:``` Quantidade de memória. Por padrão 8096m.
-
-```MODFOLDERS```: Pastas usadas para os mods. As opções devem ser separadas por vírgula, por exemplo: workshop,steam,mods
-
-```NOSTEAM:``` Inicia o servidor no modo NoSteam.
-
-```PORT:``` Porta do servidor. Por padrão 16261
-
-```SERVERNAME:``` Defina o nome do servidor.
-
-```SOFTRESET:``` Executa uma reinicialização suave no servidor.
-
-```STEAMVAC:``` Ativa ou desativa a proteção SteamVac no servidor
-
-```WORKSHOP_IDS:``` Lista separada por ponto-e-vírgula de IDs de oficina para instalar no servidor
-
-```MOD_IDS:``` Lista separada por ponto-e-vírgula de Mod IDs para instalar no servidor
-
-```SERVERPRESET:``` O padrão é Apocalypse. Opções permitidas: Apocalypse, Beginner, Builder, FirstWeek, SixMonthsLater, Survival e Survivor.
-
-`SERVERPRESETREPLACE:` Substitua a predefinição do servidor por aquela definida pela variável SERVERPRESET. Por padrão, false para evitar a substituição de configurações customizadas assim que o servidor for iniciado.
-
-`STEAMPORT1 & STEAMPORT2:` Define as duas portas adicionais necessárias para funcionar. Eu acho que essas portas são UDP, mas também podem ser TCP.
+|Environment Variables|Description Variables|
+|-|-|
+|```SERVERNAME:```| Defina o nome do servidor.
+|```ADMINPASSWORD:```| Senha do administrador. É obrigatório na primeira inicialização ou falhará.
+|```PASSWORD:```| Senha do servidor. É opcional.
+|```NOSTEAM:```| Inicia o servidor no modo NoSteam.
+|```PORT:```| Porta do servidor. Por padrão 16261
+|```WORKSHOP_IDS:```| Lista separada por ponto-e-vírgula de IDs de oficina para instalar no servidor
+|```MOD_IDS:```| Lista separada por ponto-e-vírgula de Mod IDs para instalar no servidor
+|```CACHEDIR:```| Defina a pasta padrão. Por padrão, odiretório inicial (/home/steam/Zomboid).
+|```DEBUG:```| Ative o modo de depuração.
+|```FORCEUPDATE:```| Force uma atualização a cada inicialização.
+|```IP:```| Defina o IP da interface. Por padrão, todas as interfaces.
+|```MEMORY:```| Quantidade de memória. Por padrão 8096m.
+|```MODFOLDERS:```| Pastas usadas para os mods. As opções devem ser separadas por vírgula, por exemplo: workshop,steam,mods
+|```SOFTRESET:```| Executa uma reinicialização suave no servidor.
+|```STEAMVAC:```| Ativa ou desativa a proteção SteamVac no servidor
+|```SERVERPRESET:```| O padrão é Apocalypse. Opções permitidas: Apocalypse, Beginner, Builder, FirstWeek, SixMonthsLater, Survival e Survivor.
+|```SERVERPRESETREPLACE:```| Substitua a predefinição do servidor por aquela definida pela variável SERVERPRESET. Por padrão, false para evitar a substituição de configurações customizadas assim que o servidor for iniciado.
+|```STEAMPORT1 & STEAMPORT2:```| Define as duas portas adicionais necessárias para funcionar. Eu acho que essas portas são UDP, mas também podem ser TCP.
 
 
 Os mods serão instalados na inicialização do segundo servidor
