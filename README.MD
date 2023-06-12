@@ -6,7 +6,7 @@ A imagem pronta para uso está disponível aqui:
 
 https://hub.docker.com/r/lorthe/project_zomboid_monga
 
-## Environment variables
+## Environment Variables
 
 Este dockerfile converte algumas variáveis ​​env em argumentos no comando do servidor. A imagem suporta as seguintes variáveis ​​de ambiente:
 
@@ -55,13 +55,13 @@ Removendo os seguintes arquivos na pasta de dados do servidor (ToDo: tenho que p
 
 Atualmente não está funcionando corretamente e fará com que o servidor trave quando estiver ativo. Além disso, os pontos acima não são executados, portanto, nada será alterado no servidor.
 
-## Portas necessárias
+## Portas Necessárias
 
 As portas necessárias estão documentadas no [wiki oficial](https://pzwiki.net/wiki/Dedicated_Server#Forwarding_Required_Ports)
 
 Por enquanto as portas são as seguintes, mas pode mudar.
 
-### Portas de clientes Steam
+### Portas de Clientes Steam
 
 Esta porta é utilizada pelos clientes Steam para se conectar com o servidor, portanto deve ser aberta no firewall e configurada no NAT.
 
@@ -69,7 +69,7 @@ Esta porta é utilizada pelos clientes Steam para se conectar com o servidor, po
 * 8767 UDP
 * 16261 UDP (configurável)
 
-### Portas de clientes não Steam
+### Portas de Clientes não Steam
 
 Esta porta é utilizada pelos clientes No Steam para se conectar com o servidor, portanto deve ser aberta no firewall e configurada no NAT.
 
