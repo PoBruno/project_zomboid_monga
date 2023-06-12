@@ -29,7 +29,7 @@ Este dockerfile converte algumas variáveis ​​env em argumentos no comando d
 |```STEAMVAC:```| Ativa ou desativa a proteção SteamVac no servidor
 |```SERVERPRESET:```| O padrão é Apocalypse. Opções permitidas: Apocalypse, Beginner, Builder, FirstWeek, SixMonthsLater, Survival e Survivor.
 |```SERVERPRESETREPLACE:```| Substitua a predefinição do servidor por aquela definida pela variável SERVERPRESET. Por padrão, false para evitar a substituição de configurações customizadas assim que o servidor for iniciado.
-|```STEAMPORT1 & STEAMPORT2:```| Define as duas portas adicionais necessárias para funcionar. Eu acho que essas portas são UDP, mas também podem ser TCP.
+|```STEAMPORT1 & STEAMPORT2:```| Define as duas portas adicionais necessárias para funcionar. Eu acho que essas portas são UDP, mas também podem ser TCP. 16261,16262,27015
 
 
 Os mods serão instalados na inicialização do segundo servidor
