@@ -2,8 +2,8 @@
 
 ########################333333##################
 ##                                            ##
-## This script has not been tested yet.       ##
-## Waiting for a new server version to do it. ##
+## Este script ainda não foi testado.         ##
+## Esperando uma nova versão do servidor.     ##
 ##                                            ##
 ########################333333##################
 
@@ -17,12 +17,13 @@ cd "${SCRIPT_DIR}/../"
 
 ###########################################
 ##
-## Function to compare two version numbers
+## Função para comparar dois números de versão
 ##
-## Return:
-##   1: First version is higher
-##  -1: Second version is higher
-##   0: Both versions are equal
+## Retornar:
+##
+##  1: A primeira versão é superior
+## -1: A segunda versão é superior
+##  0: Ambas as versões são iguais
 ##
 function versionCompare(){
   A_LENGTH=`echo -n $1|sed 's/[^\.]*//g'|wc -m`
@@ -61,14 +62,14 @@ function versionCompare(){
   echo 0
 }
 
-# Get the laster version in dockerhub
+# Obtenha a versão mais recente no docker hub
 LATEST_IMAGE_VERSION=`curl -L -s "https://registry.hub.docker.com/v2/repositories/${DOCKER_IMAGE}/tags?page_size=1024"|jq  '.results[]["name"]'|grep -iv "latest"|sort|tail -n1|sed 's/"//g'`
 
-##########################################
-##                                      ##
-## Checking the latest version in Forum ##
-##                                      ##
-##########################################
+################################################
+##                                            ##
+## Verificando a versão mais recente no Fórum ##
+##                                            ##
+################################################
 LATEST_SERVER_VERSION=`curl "${PZ_URL_FORUM}" 2>/dev/null|egrep -iv "(IWBUMS|UNSTABLE)"|grep -oPi "[0-9]{1,3}\.[0-9]{1,2} released"|sort -r|head -n1|grep -oP "[0-9]{1,3}\.[0-9]{1,2}"`
 NEW_VERSION=$(versionCompare ${LATEST_IMAGE_VERSION} ${LATEST_SERVER_VERSION})
 
@@ -89,11 +90,11 @@ else
   echo -e "\n\nThere was an unknown error.\n\n"
 fi
 
-############################################
-##                                        ##
-## Checking the latest version in webpage ##
-##                                        ##
-############################################
+########################################################
+##                                                    ##
+## Verificando a versão mais recente na página da web ##
+##                                                    ##
+########################################################
 LATEST_SERVER_VERSION=`curl "${PZ_URL_WEB}" 2>/dev/null| grep -i "Stable Build" | head -n1 | cut -d ":" -f2 | awk '{print $1}'`
 
 NEW_VERSION=$(versionCompare ${LATEST_IMAGE_VERSION} ${LATEST_SERVER_VERSION})

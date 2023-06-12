@@ -2,78 +2,67 @@
 
 cd ${STEAMAPPDIR}
 
-#####################################
-#                                   #
-# Force an update if the env is set #
-#                                   #
-#####################################
-
+# Forçar uma atualização se o ambiente estiver definido
 if [ "${FORCEUPDATE}" == "1" ]; then
   echo "FORCEUPDATE variable is set, so the server will be updated right now"
   bash "${STEAMCMDDIR}/steamcmd.sh" +force_install_dir "${STEAMAPPDIR}" +login anonymous +app_update "${STEAMAPPID}" validate +quit
 fi
 
-
-######################################
-#                                    #
-# Process the arguments in variables #
-#                                    #
-######################################
+# Processe os argumentos em variáveis
 ARGS=""
-
-# Set the server memory. Units are accepted (1024m=1Gig, 2048m=2Gig, 4096m=4Gig): Example: 1024m
+#Defina a memória do servidor. As unidades são aceitas (1024m=1Gig, 2048m=2Gig, 4096m=4Gig): Exemplo: 1024m
 if [ -n "${MEMORY}" ]; then
   ARGS="${ARGS} -Xmx${MEMORY} -Xms${MEMORY}"
 fi
 
-# Option to perform a Soft Reset
+# Opção para executar um Soft Reset
 if [ "${SOFTRESET}" == "1" ] || [ "${SOFTRESET,,}" == "true" ]; then
   ARGS="${ARGS} -Dsoftreset"
 fi
 
-# End of Java arguments
+# Fim dos argumentos Java
 ARGS="${ARGS} -- "
 
-# Disables Steam integration on server.
+# Desativa a integração do Steam no servidor.
 # - Default: Enabled
 if [ "${NOSTEAM}" == "1" ] || [ "${NOSTEAM,,}" == "true" ]; then
   ARGS="${ARGS} -nosteam"
 fi
 
-# Sets the path for the game data cache dir.
+# Define o caminho para o diretório do cache de dados do jogo.
 # - Default: ~/Zomboid
 # - Example: /server/Zomboid/data
 if [ -n "${CACHEDIR}" ]; then
   ARGS="${ARGS} -cachedir=${CACHEDIR}"
 fi
 
-# Option to control where mods are loaded from and the order. Any of the 3 keywords may be left out and may appear in any order.
+# Opção para controlar de onde os mods são carregados e a ordem. Qualquer uma das 3 palavras-chave pode ser deixada de fora e pode aparecer em qualquer ordem.
 # - Default: workshop,steam,mods
 # - Example: mods,steam
 if [ -n "${MODFOLDERS}" ]; then
   ARGS="${ARGS} -modfolders ${MODFOLDERS}"
 fi
 
-# Launches the game in debug mode.
+# Inicia o jogo no modo de depuração.
 # - Default: Disabled
 if [ "${DEBUG}" == "1" ] || [ "${DEBUG,,}" == "true" ]; then
   ARGS="${ARGS} -debug"
 fi
 
-# Option to bypasses the enter-a-password prompt when creating a server.
-# This option is mandatory the first startup or will be asked in console and startup will fail.
-# Once is launched and data is created, then can be removed without problem.
-# Is recommended to remove it, because the server logs the arguments in clear text, so Admin password will be sent to log in every startup.
+# Opção para ignorar o prompt de digitação de senha ao criar um servidor.
+# Esta opção é obrigatória na primeira inicialização ou será solicitada no console e a inicialização falhará.
+# Uma vez iniciado e os dados criados, podem ser removidos sem problemas.
+# É recomendável removê-lo, porque o servidor registra os argumentos em texto não criptografado, portanto, a senha do administrador será enviada para fazer login a cada inicialização.
 if [ -n "${ADMINPASSWORD}" ]; then
   ARGS="${ARGS} -adminpassword ${ADMINPASSWORD}"
 fi
 
-# Server password
+# Senha do servidor
 if [ -n "${PASSWORD}" ]; then
   ARGS="${ARGS} -password ${PASSWORD}"
 fi
 
-# You can choose a different servername by using this option when starting the server.
+# Você pode escolher um nome de servidor diferente usando esta opção ao iniciar o servidor.
 if [ -n "${SERVERNAME}" ]; then
   ARGS="${ARGS} -servername ${SERVERNAME}"
 else
@@ -81,45 +70,45 @@ else
   SERVERNAME="servertest"
 fi
 
-# If preset is set, then the config file is generated when it doesn't exists or SERVERPRESETREPLACE is set to True.
+# Se a predefinição estiver definida, o arquivo de configuração será gerado quando não existir ou SERVERPRESETREPLACE estiver definido como True.
 if [ -n "${SERVERPRESET}" ]; then
-  # If preset file doesn't exists then show an error and exit
+  # Se o arquivo predefinido não existir, mostre um erro e saia
   if [ ! -f "${STEAMAPPDIR}/media/lua/shared/Sandbox/${SERVERPRESET}.lua" ]; then
     echo "*** ERROR: the preset ${SERVERPRESET} doesn't exists. Please fix the configuration before start the server ***"
     exit 1
-  # If SandboxVars files doesn't exists or replace is true, copy the file
+  # Se os arquivos SandboxVars não existirem ou a substituição for verdadeira, copie o arquivo
   elif [ ! -f "${HOMEDIR}/Zomboid/Server/${SERVERNAME}_SandboxVars.lua" ] || [ "${SERVERPRESETREPLACE,,}" == "true" ]; then
     echo "*** INFO: New server will be created using the preset ${SERVERPRESET} ***"
     echo "*** Copying preset file from \"${STEAMAPPDIR}/media/lua/shared/Sandbox/${SERVERPRESET}.lua\" to \"${HOMEDIR}/Zomboid/Server/${SERVERNAME}_SandboxVars.lua\" ***"
     mkdir -p "${HOMEDIR}/Zomboid/Server/"
     cp -nf "${STEAMAPPDIR}/media/lua/shared/Sandbox/${SERVERPRESET}.lua" "${HOMEDIR}/Zomboid/Server/${SERVERNAME}_SandboxVars.lua"
     sed -i "1s/return.*/SandboxVars = \{/" "${HOMEDIR}/Zomboid/Server/${SERVERNAME}_SandboxVars.lua"
-    # Remove carriage return
+    # Remova o retorno do carro
     dos2unix "${HOMEDIR}/Zomboid/Server/${SERVERNAME}_SandboxVars.lua"
-    # I have seen that the file is created in execution mode (755). Change the file mode for security reasons.
+    # Eu vi que o arquivo é criado no modo de execução (755). Altere o modo de arquivo por motivos de segurança.
     chmod 644 "${HOMEDIR}/Zomboid/Server/${SERVERNAME}_SandboxVars.lua"
   fi
 fi
 
-# Option to handle multiple network cards. Example: 127.0.0.1
+# Opção para lidar com várias placas de rede. Exemplo: 127.0.0.1
 if [ -n "${IP}" ]; then
   ARGS="${ARGS} ${IP} -ip ${IP}"
 fi
 
-# Set the DefaultPort for the server. Example: 16261
+# Definir o DefaultPort para o servidor. Example: 16261
 if [ -n "${PORT}" ]; then
   ARGS="${ARGS} -port ${PORT}"
 fi
 
-# Option to enable/disable VAC on Steam servers. On the server command-line use -steamvac true/false. In the server's INI file, use STEAMVAC=true/false.
+# Opção para ativar/desativar o VAC nos servidores Steam. Na linha de comando do servidor, use -steamvac true/false. No arquivo INI do servidor, use STEAMVAC=true/false.
 if [ -n "${STEAMVAC}" ]; then
   ARGS="${ARGS} -steamvac ${STEAMVAC,,}"
 fi
 
-# Steam servers require two additional ports to function (I'm guessing they are both UDP ports, but you may need TCP as well).
-# These are in addition to the DefaultPort= setting. These can be specified in two ways:
-#  - In the server's INI file as SteamPort1= and SteamPort2=.
-#  - Using STEAMPORT1 and STEAMPORT2 variables.
+# Os servidores Steam requerem duas portas adicionais para funcionar (acho que ambas são portas UDP, mas você também pode precisar de TCP).
+# Estes são adicionais à configuração DefaultPort=. Estes podem ser especificados de duas maneiras:
+#  - No arquivo INI do servidor como SteamPort1= e SteamPort2=.
+#  - Usando variáveis ​​STEAMPORT1 e STEAMPORT2.
 if [ -n "${STEAMPORT1}" ]; then
   ARGS="${ARGS} -steamport1 ${STEAMPORT1}"
 fi
@@ -142,11 +131,11 @@ if [ -n "${WORKSHOP_IDS}" ]; then
 fi
 
 
-# Fix to a bug in start-server.sh that causes to no preload a library:
-# ERROR: ld.so: object 'libjsig.so' from LD_PRELOAD cannot be preloaded (cannot open shared object file): ignored.
+# Correção de um bug em start-server.sh que causa o não pré-carregamento de uma biblioteca:
+# ERRO: ld.so: objeto 'libjsig.so' de LD_PRELOAD não pode ser pré-carregado (não pode abrir arquivo de objeto compartilhado): ignorado.
 export LD_LIBRARY_PATH="${STEAMAPPDIR}/jre64/lib:${LD_LIBRARY_PATH}"
 
-## Fix the permissions in the data and workshop folders
+## Fixe as permissões nas pastas data e workshop
 chown -R 1000:1000 /home/steam/pz-dedicated/steamapps/workshop /home/steam/Zomboid
 
 su - steam -c "export LD_LIBRARY_PATH=\"${STEAMAPPDIR}/jre64/lib:${LD_LIBRARY_PATH}\" && cd ${STEAMAPPDIR} && pwd && ./start-server.sh ${ARGS}"

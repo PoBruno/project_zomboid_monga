@@ -13,7 +13,7 @@ services:
       - "16262:16262/udp"
       - "27015:27015/tcp"
     volumes:
-      # Server data
+      #dados do servidor
       - ./data:/home/steam/Zomboid
-      # Workshop mods folder
+      #Pasta de mods de oficina
       - ./workshop-mods:/home/steam/pz-dedicated/steamapps/workshop
